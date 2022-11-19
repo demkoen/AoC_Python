@@ -17,7 +17,7 @@ def Day1():
 
 def LoadCsvFile():
     try:
-        return pd.read_csv("input.txt", names=['Dept'])
+        return pd.read_csv("input.txt", names=['Direction'])
     except:
         print('Error reading input file')
 
