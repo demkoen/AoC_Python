@@ -1,50 +1,55 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 
 import pandas as pd
 
 HorizontalPosition = 0
 VerticalPosition = 0
 
+
 def Day2():
     df = LoadCsvFile()
-    #print(df.to_string())
     CalulatePosition(df)
+
 
 def CalulatePosition(df):
     horizontalPosition = 0
-    verticalPosition = 0
+    depth = 0
     index = 0
 
-    for value in df.iterrows('Distance'):
-        print(f'value on line is: {df['Direction'].iloc[index]}')
+    for value in df["Direction"]:
+        match value:
+            case "up":
+                depth = DecreaseVerticalPosition(depth, df["Distance"].iloc[index])
+            case "down":
+                depth = IncreaseVerticalPosition(depth, df["Distance"].iloc[index])
+            case "forward":
+                horizontalPosition = IncreaseHorizontalPosition(horizontalPosition, df["Distance"].iloc[index])
+            case _:
+                print(f'error wat')
         index = index + 1
+    print(f'Horizontalposition: {horizontalPosition}')
+    print(f'depth: {depth}')
+    print(f'result: {horizontalPosition * depth}')
+
 
 def IncreaseHorizontalPosition(horizontalPosition, value):
-    if (horizontalPosition + value) <= 0:
-        horizontalPosition = horizontalPosition + value
-    else:
-        horizontalPosition = 0
-    return horizontalPosition
+    return horizontalPosition + value
 
-def DecreaseHorizontalPosition(horizontalPosition, value):
-    return horizontalPosition - value
 
 def IncreaseVerticalPosition(verticalPosition, value):
-    if (verticalPosition + value) <= 0:
-        verticalPosition = verticalPosition + value
+    return verticalPosition + value
+
+
+def DecreaseVerticalPosition(verticalPosition, value):
+    if (verticalPosition - value) > 0:
+        verticalPosition = verticalPosition - value
     else:
         verticalPosition = 0
     return verticalPosition
 
-def DecreaseVerticalPosition(verticalPosition, value):
-    return verticalPosition - value
 
 def LoadCsvFile():
     try:
-        return pd.read_csv("input.txt",sep=' ', names=['Direction', 'Distance'])
+        return pd.read_csv("input.txt", sep=' ', names=['Direction', 'Distance'])
     except:
         print('Error reading input file')
 
