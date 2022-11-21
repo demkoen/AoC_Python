@@ -7,10 +7,32 @@ VerticalPosition = 0
 
 def Day2():
     df = LoadCsvFile()
-    CalulatePosition(df)
+    FirstHalf(df)
+    SecondHalf(df)
 
 
-def CalulatePosition(df):
+def SecondHalf(df):
+    aim = 0
+    horizontalPosition = 0
+    depth = 0
+    index = 0;
+
+    for value in df["Direction"]:
+        match value:
+            case "up":
+                aim -= df["Distance"].iloc[index]
+            case "down":
+                aim += df["Distance"].iloc[index]
+            case "forward":
+                horizontalPosition = IncreaseHorizontalPosition(horizontalPosition, df["Distance"].iloc[index])
+                if aim != 0:
+                    depth += (aim * df["Distance"].iloc[index])
+            case _:
+                print(f'error wat')
+        index += 1
+    print(f'result: {horizontalPosition * depth}')
+
+def FirstHalf(df):
     horizontalPosition = 0
     depth = 0
     index = 0
@@ -25,7 +47,7 @@ def CalulatePosition(df):
                 horizontalPosition = IncreaseHorizontalPosition(horizontalPosition, df["Distance"].iloc[index])
             case _:
                 print(f'error wat')
-        index = index + 1
+        index += 1
     print(f'Horizontalposition: {horizontalPosition}')
     print(f'depth: {depth}')
     print(f'result: {horizontalPosition * depth}')
